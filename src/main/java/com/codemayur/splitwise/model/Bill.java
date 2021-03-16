@@ -19,8 +19,9 @@ public class Bill {
 
 	@NonNull
 	private Integer id;
-	private String amount;
-	private String groupId;
+	private String name;
+	private Float amount;
+	private Integer groupId;
 
 	/**
 	 * <p>
@@ -30,7 +31,7 @@ public class Bill {
 	 * {@code Value:} Amount to be paid by the user
 	 * </p>
 	 */
-	private Map<Integer, String> amountToBePaid;
+	private Map<Integer, Float> amountToBePaid;
 
 	/**
 	 * <p>
@@ -40,6 +41,6 @@ public class Bill {
 	 * {@code Value:} Amount paid by the user
 	 * </p>
 	 */
-	private Map<Integer, String> amountPaid;
+	private Map<Integer, Float> amountPaid;
 
 }
