@@ -1,6 +1,7 @@
 package com.codemayur.splitwise.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,7 @@ public class GroupController {
 	private GroupService groupService;
 
 	@Autowired
-	public GroupController(
-			ValidateGroup validateGroup,
+	public GroupController(ValidateGroup validateGroup,
 			GroupService groupService) {
 		this.validateGroup = validateGroup;
 		this.groupService = groupService;
@@ -37,12 +37,10 @@ public class GroupController {
 		Map<String, Object> responseMap = new HashMap<>();
 		Group group = null;
 		try {
+
 			validateGroup.validateGroupId(groupId);
 			group = groupService.getGroupById(groupId);
-			if (group == null) {
-				throw new IllegalStateException(String.format("Group with id: %s doesn't exist",
-						groupId));
-			}
+
 		} catch (IllegalStateException e) {
 			responseMap.put(GroupConstant.SUCCESS,
 					false);
@@ -76,8 +74,10 @@ public class GroupController {
 	public ResponseEntity<Map<String, Object>> createGroup(@RequestParam("groupName") String groupName) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
+
 			validateGroup.validateGroupName(groupName);
 			groupService.createGroup(groupName);
+
 		} catch (IllegalStateException e) {
 			responseMap.put(GroupConstant.SUCCESS,
 					false);
@@ -97,7 +97,76 @@ public class GroupController {
 				true);
 		responseMap.put(GroupConstant.MESSAGE,
 				null);
-		return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		return new ResponseEntity<>(responseMap,
+				HttpStatus.OK);
+	}
+
+	@PostMapping("/addMembers")
+	public ResponseEntity<Map<String, Object>> addMembersInGroup(@RequestParam("groupId") Integer groupId,
+			@RequestParam("userIdList") List<Integer> userIdList) {
+		Map<String, Object> responseMap = new HashMap<>();
+		try {
+
+			validateGroup.validateGroupId(groupId);
+			validateGroup.validateUserIdList(userIdList);
+			
+			groupService.addMembersInGroup(groupId, userIdList);
+
+		} catch (IllegalStateException e) {
+			responseMap.put(GroupConstant.SUCCESS,
+					false);
+			responseMap.put(GroupConstant.MESSAGE,
+					e.getMessage());
+			return new ResponseEntity<>(responseMap,
+					HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			responseMap.put(GroupConstant.SUCCESS,
+					false);
+			responseMap.put(GroupConstant.MESSAGE,
+					e.getMessage());
+			return new ResponseEntity<>(responseMap,
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		responseMap.put(GroupConstant.SUCCESS,
+				true);
+		responseMap.put(GroupConstant.MESSAGE,
+				null);
+		return new ResponseEntity<>(responseMap,
+				HttpStatus.OK);
+	}
+	
+	@PostMapping("/deleteMembers")
+	public ResponseEntity<Map<String, Object>> deleteMembersFromGroup(@RequestParam("groupId") Integer groupId,
+			@RequestParam("userIdList") List<Integer> userIdList) {
+		Map<String, Object> responseMap = new HashMap<>();
+		try {
+
+			validateGroup.validateGroupId(groupId);
+			validateGroup.validateUserIdList(userIdList);
+			
+			groupService.deleteMembersFromGroup(groupId, userIdList);
+
+		} catch (IllegalStateException e) {
+			responseMap.put(GroupConstant.SUCCESS,
+					false);
+			responseMap.put(GroupConstant.MESSAGE,
+					e.getMessage());
+			return new ResponseEntity<>(responseMap,
+					HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			responseMap.put(GroupConstant.SUCCESS,
+					false);
+			responseMap.put(GroupConstant.MESSAGE,
+					e.getMessage());
+			return new ResponseEntity<>(responseMap,
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		responseMap.put(GroupConstant.SUCCESS,
+				true);
+		responseMap.put(GroupConstant.MESSAGE,
+				null);
+		return new ResponseEntity<>(responseMap,
+				HttpStatus.OK);
 	}
 
 }

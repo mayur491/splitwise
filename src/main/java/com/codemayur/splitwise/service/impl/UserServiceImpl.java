@@ -11,15 +11,21 @@ import com.codemayur.splitwise.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	private UserDao userDao;
-	
+
 	@Autowired
-	public UserServiceImpl(UserDao userDao) {
+	public UserServiceImpl(
+			UserDao userDao) {
 		this.userDao = userDao;
 	}
-	
+
 	@Override
 	public User getUserById(Integer userId) {
-		return userDao.getUserById(userId);
+		User user = userDao.getUserById(userId);
+		if (user == null) {
+			throw new IllegalStateException(String.format("User with id: %s doesn't exists",
+					userId));
+		}
+		return user;
 	}
 
 	@Override

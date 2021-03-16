@@ -1,6 +1,7 @@
 package com.codemayur.splitwise.dao.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.codemayur.splitwise.dao.GroupDao;
 import com.codemayur.splitwise.model.Group;
+import com.codemayur.splitwise.model.User;
 
 @Repository("groupDaoImpl")
 public class GroupDaoImpl implements GroupDao {
@@ -52,6 +54,46 @@ public class GroupDaoImpl implements GroupDao {
 		}
 		maxGroupId = maxGroupId + 1;
 		return maxGroupId;
+	}
+
+	@Override
+	public void addMembersInGroup(Integer groupId,
+			List<User> members) {
+		Group group = groupMap.get(groupId);
+		if (group == null) {
+			throw new IllegalStateException(String.format("Group with id: %s doesn't exists",
+					groupId));
+		}
+		
+		List<User> list = group.getMembers();
+		if(Objects.isNull(list) || list.isEmpty()) {
+			group.setMembers(members);
+		} else {
+			for (User user : members) {
+				if(!list.contains(user)) {
+					list.add(user);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void removeMembersFromGroup(Integer groupId,
+			List<User> members) {
+		Group group = groupMap.get(groupId);
+		if (group == null) {
+			throw new IllegalStateException(String.format("Group with id: %s doesn't exists",
+					groupId));
+		}
+		
+		List<User> list = group.getMembers();
+		if(Objects.nonNull(list) && !list.isEmpty()) {
+			for (User user : members) {
+				if(list.contains(user)) {
+					list.remove(user);
+				}
+			}
+		}
 	}
 
 }

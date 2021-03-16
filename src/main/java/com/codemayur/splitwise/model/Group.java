@@ -21,7 +21,12 @@ public class Group {
 	private Integer id;
 	@NonNull
 	private String name;
-	
+
+	/**
+	 * <p>
+	 * List of all users present in the group.
+	 * </p>
+	 */
 	private List<User> members;
 
 }

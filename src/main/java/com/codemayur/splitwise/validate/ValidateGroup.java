@@ -1,5 +1,6 @@
 package com.codemayur.splitwise.validate;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.util.ObjectUtils;
 @Component
 public class ValidateGroup {
 
+	private ValidateUser validateUser;
+
 	@Autowired
-	public ValidateGroup() {
-		// nothing
+	public ValidateGroup(ValidateUser validateUser) {
+		this.validateUser = validateUser;
 	}
 
 	public void validateGroupId(Integer groupId) {
@@ -26,6 +29,12 @@ public class ValidateGroup {
 		}
 		if (ObjectUtils.isEmpty(groupName)) {
 			throw new IllegalStateException("Group name cannot be empty");
+		}
+	}
+
+	public void validateUserIdList(List<Integer> userIdList) {
+		for (Integer userId : userIdList) {
+			validateUser.validateUserId(userId);
 		}
 	}
 

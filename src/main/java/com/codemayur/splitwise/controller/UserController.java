@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,22 +28,20 @@ public class UserController {
 	@Autowired
 	public UserController(
 			ValidateUser validateUser,
-			UserService userService) {
+			@Qualifier("userServiceImpl") UserService userService) {
 		this.validateUser = validateUser;
 		this.userService = userService;
 	}
 
 	@GetMapping
-	public ResponseEntity<Map<String, Object>> getUser(@RequestParam("userId") Integer userId) {
+	public ResponseEntity<Map<String, Object>> getUserById(@RequestParam("userId") Integer userId) {
 		Map<String, Object> responseMap = new HashMap<>();
 		User user = null;
 		try {
+
 			validateUser.validateUserId(userId);
 			user = userService.getUserById(userId);
-			if (user == null) {
-				throw new IllegalStateException(String.format("User with id: %s doesn't exist",
-						userId));
-			}
+
 		} catch (IllegalStateException e) {
 			responseMap.put(UserConstant.SUCCESS,
 					false);
@@ -76,8 +75,10 @@ public class UserController {
 	public ResponseEntity<Map<String, Object>> createUser(@RequestParam("userName") String userName) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
+
 			validateUser.validateUserName(userName);
 			userService.createUser(userName);
+
 		} catch (IllegalStateException e) {
 			responseMap.put(UserConstant.SUCCESS,
 					false);
@@ -97,7 +98,8 @@ public class UserController {
 				true);
 		responseMap.put(UserConstant.MESSAGE,
 				null);
-		return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		return new ResponseEntity<>(responseMap,
+				HttpStatus.OK);
 	}
 
 }
