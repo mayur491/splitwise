@@ -1,4 +1,4 @@
-package com.codemayur.splitwise.exception;
+package com.codemayur.splitwise.dao.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.codemayur.splitwise.dao.impl.UserDao;
+import com.codemayur.splitwise.dao.UserDao;
 import com.codemayur.splitwise.model.User;
 
 @Repository("userDaoImpl")

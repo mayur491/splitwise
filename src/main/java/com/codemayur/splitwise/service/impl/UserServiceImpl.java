@@ -3,7 +3,7 @@ package com.codemayur.splitwise.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.codemayur.splitwise.dao.impl.UserDao;
+import com.codemayur.splitwise.dao.UserDao;
 import com.codemayur.splitwise.model.User;
 import com.codemayur.splitwise.service.UserService;
 

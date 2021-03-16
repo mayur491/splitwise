@@ -1,4 +1,4 @@
-package com.codemayur.splitwise.dao.impl;
+package com.codemayur.splitwise.dao;
 
 import com.codemayur.splitwise.model.User;
 
